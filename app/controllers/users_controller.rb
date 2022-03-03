@@ -11,7 +11,7 @@ class UsersController < ApplicationController
 
         if @user && @user.valid_password?(params[:password])
             @payload = {user_id: @user.id}
-            @token = encode(@payload)
+            @token = encode_token(@payload)
             render :json => {token: @token}
         else
             render json: {error: "User not found"}
@@ -20,28 +20,20 @@ class UsersController < ApplicationController
 
     def token_authenticate
         @token = request.headers["Authenticate"]
-        @user = User.find(decode(@token)["user_id"])
+        @user = User.find(decode_token(@token)["user_id"])
 
         render json: @user 
-    end
+    end 
 
-    def show
-        @user = User.find(params[:id])
-        render json: @user
-    end
-
-    def new
-        @user = User.new
-    end
-
-     def create
-        @user = User.new(user_params)
-    
-        if @user.save
-            render json: @user, status: :created
-        else
-          render :new, status: :unprocessable_entity
-        end
+    def create
+      user = User.create(user_params)
+      if user.valid?
+        payload = {user_id: user.id}
+        token = encode_token(payload)
+        render json: {user: user, jwt: token}
+      else
+        render json: {errors: user.errors.full_messages}, status: :not_acceptable
+      end
     end
 
     def edit
@@ -71,7 +63,7 @@ class UsersController < ApplicationController
     private
 
     def user_params
-        params.require(:user).permit(:email, :password)
+        params.require(:user).permit(:email, :password, :resident_id)
     end
 
 end

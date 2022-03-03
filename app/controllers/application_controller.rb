@@ -7,11 +7,11 @@ class ApplicationController < ActionController::API
         "4227435"
     end
 
-    def encode(payload)
+    def encode_token(payload)
         JWT.encode(payload, secret_key, 'HS256')
     end
 
-    def decode(token)
+    def decode_token(token)
         JWT.decode(token, "4227435", true, {algorithm: 'HS256'})[0]
     end
 

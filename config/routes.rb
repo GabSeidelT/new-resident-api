@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   post '/login', to: 'users#login', as: 'user_login'
   get '/login', to: 'users#token_authenticate', as: 'user_auth'
+  post '/register', to: 'users#create', as: 'user_register'  
 
   # devise_for :users, controllers: { sessions: 'users/sessions', registrations: 'users/registrations' }
 

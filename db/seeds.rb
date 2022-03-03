@@ -5,7 +5,7 @@
     initial_date: Date.parse('2016-08-20'),
     final_date: Date.parse('2016-08-20'),
     )
-@resident_admin = Resident.create(name: "user",
+@resident_user = Resident.create(name: "user",
     email: "user@gmail.com", 
     whatsapp: 49984033000,
     registration_id: 12312312,
@@ -19,7 +19,7 @@ User.create(email: "admin@gmail.com",
     status: 1)
 User.create(email: "user@gmail.com",
     password: 123123,
-    resident_id: 2)
+    resident_id: @resident_user.id)
 
 Company.create({
     name: "Teste1",
